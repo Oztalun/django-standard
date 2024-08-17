@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block titlename %}
+    <title>My First Django PJT</title>
+{% endblock titlename %}
+
+{% block content %}
+<h1>My First Django Project</h1>
+<p>My first Django project is working!</p>
+<a href="{% url 'articles:data-throw' %}"><button>Throw로 이동</button></a>
+<a href="{% url 'articles:hello' %}"><button>Hello로 이동</button></a>
+<a href="{% url 'users:users' %}"><button>Users로 이동</button></a>
+{% endblock content %}
