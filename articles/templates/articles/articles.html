@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block titlename %}
+<title>Articles</title>
+{% endblock titlename %}
+
+{% block content %}
+<div>
+    <h2>Articles</h2>
+    <a href="{% url 'articles:new' %}"><button>글 쓰러 가기</button></a><br><br>
+    {% for article in articles %}
+    {{ article.title }}<br>
+    {% endfor %}
+    
+</div>
+<a href="{% url 'articles:data-throw' %}">다시 데이터 보내러가기</a>
+{% endblock content %}

@@ -1,10 +1,25 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+# from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from .models import Article
 
+def articles(request):
+    context = {"articles":Article.objects.all().order_by("-created_at")}
+    return render(request, "articles/articles.html", context)
+# '{{article.title}}'
+# <a href="{% url 'articles:data-throw' %}">
+def new(request):
+    return render(request, "articles/new.html")
+
+def create(request):
+    title = request.POST.get("title")
+    content = request.POST.get("content")
+    Article.objects.create(title=title, content=content)
+    return render(request, "articles/create.html")
 
 def index(request):
     return render(request, "articles/index.html")
 
+# 지우랬는데 안지울거임
 def hello(request):
     name = "희경"
     tags = ["python", "django", "html", "css"]
