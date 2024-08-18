@@ -1,11 +1,20 @@
 # accounts/views.py
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
 from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from .forms import CustomUserChangeForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordChangeForm,
+)
+from django.contrib.auth import (
+    login as auth_login,
+    logout as auth_logout,
+    update_session_auth_hash
+)
+
 
 @require_http_methods(["GET", "POST"])
 def login(request):
@@ -52,8 +61,25 @@ def delete(request):
 @require_http_methods(["GET", "POST"])
 def update(request):
     if request.method == "POST":
-        pass
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("articles:index")
     else:
-        form = UserChangeForm(instance=request.user)
+        form = CustomUserChangeForm(instance=request.user)
     context = {"form": form}
     return render(request, "accounts/update.html", context)
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect("index")
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {"form": form}
+    return render(request, "accounts/change_password.html", context)
