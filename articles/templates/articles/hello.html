@@ -9,9 +9,9 @@
 <p>첫번째 태그는 {{ tags.0|upper }}</p>
 <p>모든 책 목록</p>
 <ul>
-{% for book in books %}
+    {% for book in books %}
     <li>{{ book }}</li>
-{% endfor %}
+    {% endfor %}
 </ul>
-<a href="{% url 'index' %}"><button>홈으로 가기</button></a>
+<a href="{% url 'articles:index' %}"><button>홈으로 가기</button></a>
 {% endblock content %}

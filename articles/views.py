@@ -1,7 +1,16 @@
 # from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Article
 from .forms import ArticleForm
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
+
+
+
+def index(request):
+    return render(request, "articles/index.html")
+
 
 
 def articles(request):
@@ -23,7 +32,7 @@ def articles(request):
 #         article = form.save() # 저장하고 해당 객체 반환 
 #         return redirect("articles:article_detail", article.id)
 #     return redirect("articles:new")
-
+@login_required
 def create(request):
     if request.method == "POST":
         form = ArticleForm(request.POST)
@@ -36,7 +45,7 @@ def create(request):
     return render(request, "articles/new.html", context)
 
 def article_detail(request, pk):
-    context = {"article": Article.objects.get(pk=pk)}
+    context = {"article": get_object_or_404(Article, pk=pk)}
     return render(request, "articles/article_detail.html", context)
 
 
@@ -52,9 +61,10 @@ def article_detail(request, pk):
 #     article.save()
 #     return redirect("articles:article_detail", article.pk)
 
-
+@login_required
+@require_http_methods(["GET", "POST"])
 def update(request, pk):
-    article = Article.objects.get(pk=pk)
+    article = get_object_or_404(Article, pk=pk)
     if request.method == "POST":
         form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
@@ -68,19 +78,16 @@ def update(request, pk):
     }
     return render(request, "articles/edit.html", context)
 
-
+@login_required
+@require_POST
 def delete(request, pk):
-    article = Article.objects.get(pk=pk)
-    article.delete()
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, pk=pk)
+        article.delete()
     return redirect("articles:articles")
 
 
-def index(request):
-    return render(request, "articles/index.html")
-
 # 지우랬는데 안지울거임
-
-
 def hello(request):
     name = "희경"
     tags = ["python", "django", "html", "css"]
