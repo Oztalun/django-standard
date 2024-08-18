@@ -7,9 +7,9 @@
 {% block content %}
 <div>
     <h2>Articles</h2>
-    <a href="{% url 'articles:new' %}"><button>글 쓰러 가기</button></a><br><br>
+    <a href="{% url 'articles:create' %}"><button>글 쓰러 가기</button></a><br><br>
     {% for article in articles %}
-    {{ article.title }}<br>
+    <a href="{% url 'articles:article_detail' article.pk %}">{{ article.title }}</a><br><br>
     {% endfor %}
     
 </div>
