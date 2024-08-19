@@ -48,6 +48,8 @@ def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
     comment_form = CommentForm()
     comments = Comment.objects.filter(article = pk)
+    # for comment in comments:
+    #     print(comment.pk)
     context = {"article": article, "comment_form":comment_form, "comments":comments}
     return render(request, "articles/article_detail.html", context)
 
@@ -92,6 +94,16 @@ def comment_create(request, pk):
         comment.article = article
         comment.save()
     return redirect("articles:article_detail", article.pk)
+
+
+@require_POST
+def comment_delete(request, pk):# comment의 pk
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=pk)# 해당 comment 불러옴
+        articleid = comment.article
+        article = articleid.id
+        comment.delete()
+        return redirect("articles:article_detail", article)
 
 
 @login_required
