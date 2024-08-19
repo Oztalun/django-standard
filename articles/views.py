@@ -1,10 +1,10 @@
 # from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Article
-from .forms import ArticleForm
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
+
 
 
 
@@ -35,7 +35,7 @@ def articles(request):
 @login_required
 def create(request):
     if request.method == "POST":
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST, request.FILES)
         if form.is_valid():
             article = form.save()
             return redirect("articles:article_detail", article.id)
@@ -44,8 +44,11 @@ def create(request):
     context = {"forms": forms}
     return render(request, "articles/new.html", context)
 
-def article_detail(request, pk):
-    context = {"article": get_object_or_404(Article, pk=pk)}
+def article_detail(request, pk): 
+    article = get_object_or_404(Article, pk=pk)
+    comment_form = CommentForm()
+    comments = Comment.objects.filter(article = pk)
+    context = {"article": article, "comment_form":comment_form, "comments":comments}
     return render(request, "articles/article_detail.html", context)
 
 
@@ -77,6 +80,19 @@ def update(request, pk):
         "article": article,
     }
     return render(request, "articles/edit.html", context)
+
+
+
+@require_POST
+def comment_create(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.article = article
+        comment.save()
+    return redirect("articles:article_detail", article.pk)
+
 
 @login_required
 @require_POST
