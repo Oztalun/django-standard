@@ -15,10 +15,87 @@
         crossorigin="anonymous"></script>
     <script type="module">
         import { Toast } from 'bootstrap.esm.min.js'
-
         Array.from(document.querySelectorAll('.toast'))
             .forEach(toastNode => new Toast(toastNode))
     </script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+    </style>
     {% block titlename %}
     {% endblock titlename %}
     {% block head %}
@@ -163,8 +240,6 @@
             </div>
             <div class="col-4">
                 <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
-
-
                     <div class="d-flex align-items-center" style="margin-left: 250px;">
                         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                             <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
@@ -189,8 +264,10 @@
                             <ul class="dropdown-menu text-small">
                                 {% if request.user.is_authenticated %}
                                 <li><a class="dropdown-item" href="">{{ request.user }}</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="">Guest</a></li>
                                 {% endif %}
-                                <li><a class="dropdown-item" href="{% url 'users:users' %}">My Page</a></li>
+                                <li><a class="dropdown-item" href="#">My Page</a></li>
                                 <li><a class="dropdown-item" href="#">Settings</a></li>
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
                                 <li>
@@ -198,13 +275,13 @@
                                 </li>
                                 {% if request.user.is_authenticated %}
                                 <li>
-                                    <form action="{% url 'accounts:logout' %}" method="POST">
+                                    <form action="{% url 'accounts:logout' %}" method="POST"><!-- 로그아웃 url -->
                                         {% csrf_token %}
                                         <input class="dropdown-item" type="submit" value="log out">
                                     </form>
                                 </li>
                                 <li>
-                                    <form action="{% url 'accounts:delete' %}" method="post">
+                                    <form action="{% url 'accounts:delete' %}" method="post"><!-- 회원탈퇴 url -->
                                         {% csrf_token %}
                                         <input class="dropdown-item" type="submit" value="delete ID">
                                     </form>
@@ -240,7 +317,7 @@
 
 
 
-
+    <!-- footer -->
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
