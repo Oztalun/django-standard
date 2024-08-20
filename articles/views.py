@@ -47,7 +47,10 @@ def create(request):
 def article_detail(request, pk): 
     article = get_object_or_404(Article, pk=pk)
     comment_form = CommentForm()
-    comments = Comment.objects.filter(article = pk)
+    comments = article.comments.all()
+    # comments = article.commet_set.all()
+    # article_set.all
+    # comments = Comment.objects.filter(article = pk)
     # for comment in comments:
     #     print(comment.pk)
     context = {"article": article, "comment_form":comment_form, "comments":comments}
