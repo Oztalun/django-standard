@@ -3,6 +3,11 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = UserCreationForm.Meta.fields + ()
+
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:

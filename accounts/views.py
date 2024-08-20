@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.forms import (
     AuthenticationForm,
     PasswordChangeForm,
@@ -39,13 +39,13 @@ def logout(request):
 @require_http_methods(["GET","POST"])
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
             return redirect("articles:index")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {"form": form}
     return render(request, "accounts/signup.html", context)
 
