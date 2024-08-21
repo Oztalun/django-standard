@@ -52,8 +52,17 @@
                                     <button type="button" class="btn btn-sm btn-outline-secondary"
                                         onclick="event.stopPropagation();" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal{{article.pk}}">Delete</button>
+                                    
                                     <!-- data-bs-target을 부름 exampleModal{{article.pk}}을 튀어나오게함 -->
                                     {% endif %}
+                                    <form action="{% url 'articles:like' article.pk %}" method="POST" >
+                                        {% csrf_token %}
+                                        {% if user in article.like_users.all %}
+                                        <button type="submit" onclick="event.stopPropagation();">좋아요 취소</button>
+                                        {% else %}
+                                        <button type="submit" onclick="event.stopPropagation();">좋아요</button>
+                                        {% endif %}
+                                    </form>
                                 </div>
                                 <small class="text-body-secondary">9 mins</small>
                             </div>

@@ -2,6 +2,16 @@
 
 {% block titlename %}
 <title>{{ article.title }}</title>
+<style>
+    form {
+        display: flex;
+        /* form 안의 요소들이 한 줄로 나열되도록 설정 */
+        align-items: center;
+        /* 수직 중앙 정렬 */
+        gap: 10px;
+        /* 요소들 간의 간격 */
+    }
+</style>
 {% endblock titlename %}
 
 {% block content %}
@@ -17,11 +27,14 @@
     
     <div>
         <a href="{% url 'articles:articles' %}"><button>목록 보기</button></a>
+        {% if request.user.id == article.author.id %}
         <a href="{% url 'articles:update' article.pk %}"><button>글수정</button></a>
         <form action="{% url 'articles:delete' article.pk %}" method="post">
             {% csrf_token %}
             <input type="submit" value="삭제">
         </form>
+        {% endif %}
+        
     </div>
 
     <hr>
@@ -34,11 +47,13 @@
     <ul>
         {% for comment in comments %}
             <li>
-                <p>{{comment.pk}}. {{ comment.content }}</p><br>
+                {{comment.user}}. {{ comment.content }}
+                {% if user == comment.user %}
                 <form action="{% url 'articles:comment_delete' comment.pk %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="삭제">
                 </form>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

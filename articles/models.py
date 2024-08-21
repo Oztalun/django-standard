@@ -10,27 +10,29 @@ class Article(models.Model):
     image = models.ImageField(upload_to="images/", blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles")
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="like_articles"
+    )
 
     def __str__(self):
         return self.title
 
 
-class ArticleLike(models.Model):
-    article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="likes"
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
-    )
-    like_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="like_articles"
-    )
+# class ArticleLike(models.Model):
+#     article = models.ForeignKey(
+#         Article, on_delete=models.CASCADE, related_name="likes"
+#     )
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
+#     )
 
 
 class Comment(models.Model):
     # article = models.ForeignKey(Article, on_delete=models.CASCADE)
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
     content = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

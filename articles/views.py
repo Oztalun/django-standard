@@ -19,6 +19,20 @@ def articles(request):
 # '{{article.title}}'
 
 
+@require_POST
+def like(request, pk):
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, pk=pk)
+        if article.like_users.filter(pk=request.user.pk).exists():
+            article.like_users.remove(request.user)
+        else:
+            article.like_users.add(request.user)
+    else:
+        return redirect("accounts:login")
+
+    return redirect("articles:articles")
+
+
 # def new(request):
 #     forms = ArticleForm()
 #     context = {"forms":forms}
@@ -97,6 +111,7 @@ def comment_create(request, pk):
     if form.is_valid():
         comment = form.save(commit=False)
         comment.article = article
+        comment.user = request.user
         comment.save()
     return redirect("articles:article_detail", article.pk)
 
