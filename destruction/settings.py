@@ -31,6 +31,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 1. models.py 인식, 데이터베이스 스키마 반영
+    # 2. admin.py 앱에서 로딩
+    # 3. statuc 폴더 경로를  정적 파일 로더에 자동 등록
+    # 4. templates 폴더 경로 템플릿 로더에 자동 등록
+    # 5. test 폴더에 테스트 인식
+    # 6. management/commands/폴더에 관리 명령어 추가
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

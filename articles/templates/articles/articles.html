@@ -2,6 +2,16 @@
 
 {% block titlename %}
 <title>Articles</title>
+<style>
+    form {
+        display: flex;
+        /* form 안의 요소들이 한 줄로 나열되도록 설정 */
+        align-items: center;
+        /* 수직 중앙 정렬 */
+        gap: 10px;
+        /* 요소들 간의 간격 */
+    }
+</style>
 {% endblock titlename %}
 
 {% block content %}
@@ -17,8 +27,13 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 {% for article in articles %}
-                <div class="col" onclick="event.stopPropagation(); window.location.href='{% url 'articles:article_detail' article.pk %}'">
+                <div class="col"
+                    onclick="event.stopPropagation(); window.location.href='{% url 'articles:article_detail' article.pk %}'">
                     <div class="card shadow-sm">
+                        {% if article.image %}
+                        <img class="bd-placeholder-img card-img-top" width="100%" height="225"
+                            src="{{ article.image.url }}" alt="none">
+                        {% else %}
                         <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                             preserveAspectRatio="xMidYMid slice" focusable="false">
@@ -26,16 +41,44 @@
                             <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
                                 dy=".3em">Thumbnail</text>
                         </svg>
+                        {% endif %}
                         <div class="card-body">
                             <p class="card-text">{{ article.title }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     {% if request.user.id == article.author.id %}
-                                    <button type="button" class="btn btn-sm btn-outline-secondary href_2">Edit</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick=" event.stopPropagation(); window.location.href='{% url 'articles:update' article.pk %}'">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="event.stopPropagation();" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal{{article.pk}}">Delete</button>
+                                    <!-- data-bs-target을 부름 exampleModal{{article.pk}}을 튀어나오게함 -->
                                     {% endif %}
                                 </div>
                                 <small class="text-body-secondary">9 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- id의 exampleModal을 부름 -->
+                <div class="modal fade" id="exampleModal{{article.pk}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <form action="{% url 'articles:delete' article.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -46,31 +89,6 @@
         </div>
     </div>
 </div>
-<div class="clickable-div" onclick="window.location.href='{% url 'articles:articles' %}'">
-    <p>이곳을 클릭하면 a 경로로 이동합니다.</p>
-    <div class="button-container">
-        <button onclick="event.stopPropagation(); window.location.href='{% url 'articles:articles' %}'">i 버튼</button>
-        <button onclick="event.stopPropagation(); window.location.href='{% url 'articles:articles' %}'">l 버튼</button>
-    </div>
-</div>
-<style>
-    .clickable-div {
-        width: 300px;
-        height: 200px;
-        border: 1px solid #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-    }
 
-    .button-container {
-        display: flex;
-        gap: 10px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-</style>
 
 {% endblock content %}

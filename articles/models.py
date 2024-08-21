@@ -15,6 +15,18 @@ class Article(models.Model):
         return self.title
 
 
+class ArticleLike(models.Model):
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name="likes"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
+    )
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="like_articles"
+    )
+
+
 class Comment(models.Model):
     # article = models.ForeignKey(Article, on_delete=models.CASCADE)
     article = models.ForeignKey(
