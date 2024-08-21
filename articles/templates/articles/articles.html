@@ -17,33 +17,60 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 {% for article in articles %}
-                <div class="col">
-                    <a href="{% url 'articles:article_detail' article.pk %}">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <p class="card-text">{{ article.title }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small class="text-body-secondary">9 mins</small>
+                <div class="col" onclick="event.stopPropagation(); window.location.href='{% url 'articles:article_detail' article.pk %}'">
+                    <div class="card shadow-sm">
+                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                            xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                            preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                                dy=".3em">Thumbnail</text>
+                        </svg>
+                        <div class="card-body">
+                            <p class="card-text">{{ article.title }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    {% if request.user.id == article.author.id %}
+                                    <button type="button" class="btn btn-sm btn-outline-secondary href_2">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                    {% endif %}
                                 </div>
+                                <small class="text-body-secondary">9 mins</small>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 {% endfor %}
-                
+
             </div>
         </div>
     </div>
 </div>
+<div class="clickable-div" onclick="window.location.href='{% url 'articles:articles' %}'">
+    <p>이곳을 클릭하면 a 경로로 이동합니다.</p>
+    <div class="button-container">
+        <button onclick="event.stopPropagation(); window.location.href='{% url 'articles:articles' %}'">i 버튼</button>
+        <button onclick="event.stopPropagation(); window.location.href='{% url 'articles:articles' %}'">l 버튼</button>
+    </div>
+</div>
+<style>
+    .clickable-div {
+        width: 300px;
+        height: 200px;
+        border: 1px solid #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+
 {% endblock content %}
