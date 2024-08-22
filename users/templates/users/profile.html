@@ -12,7 +12,7 @@
     </div>
 
     <div>
-        <form action="{% url 'users:follow' member.pk %}" method="POST">
+        <form action="{% url 'users:follow' member.id %}" method="POST">
             {% csrf_token %}
             {% if user in member.followers.all %}
                 <button type="submit">언팔로우</button>

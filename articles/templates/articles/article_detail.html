@@ -15,47 +15,59 @@
 {% endblock titlename %}
 
 {% block content %}
-    <h2>글 상세 페이지</h2>
-    <p>제목: {{ article.title }}</p>
-    {% if article.image %}
-        <img src="{{ article.image.url }}">
-    {% endif %}   
-    <p>내용: {{ article.content }}</p>
-    <p>작성자: {{ article.author }}</p>
-    <p>작성일시: {{ article.created_at }}</p>
-    <p>수정일시: {{ article.updated_at }}</p>
-    
-    <div>
-        <a href="{% url 'articles:articles' %}"><button>목록 보기</button></a>
-        {% if request.user.id == article.author.id %}
-        <a href="{% url 'articles:update' article.pk %}"><button>글수정</button></a>
-        <form action="{% url 'articles:delete' article.pk %}" method="post">
+<h2>글 상세 페이지</h2>
+<p>제목: {{ article.title }}</p>
+{% if article.image %}
+<img src="{{ article.image.url }}">
+{% endif %}
+<p>내용: {{ article.content }}</p>
+<p>작성자: {{ article.author }}</p>
+<p>작성일시: {{ article.created_at }}</p>
+<p>수정일시: {{ article.updated_at }}</p>
+
+<div>
+    <a href="{% url 'articles:articles' %}"><button>목록 보기</button></a>
+    <form action="{% url 'articles:like' article.pk %}" method="POST">
+        {% csrf_token %}
+        {% if user in article.like_users.all %}
+        <button type="submit" class="btn">
+            <i class="fa-solid fa-heart"></i>
+        </button>
+        {% else %}
+        <button type="submit" class="btn">
+            <i class="fa-light fa-heart"></i>
+        </button>
+        {% endif %}
+    </form>
+    {% if request.user.id == article.author.id %}
+
+    <a href="{% url 'articles:update' article.pk %}"><button>글수정</button></a>
+    <form action="{% url 'articles:delete' article.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+    </form>
+    {% endif %}
+
+</div>
+
+<hr>
+<h3>댓글</h3>
+<form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="댓글작성">
+</form>
+<ul>
+    {% for comment in comments %}
+    <li>
+        {{comment.user}}. {{ comment.content }}
+        {% if user == comment.user %}
+        <form action="{% url 'articles:comment_delete' comment.pk %}" method="post">
             {% csrf_token %}
             <input type="submit" value="삭제">
         </form>
         {% endif %}
-        
-    </div>
-
-    <hr>
-    <h3>댓글</h3>
-    <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <input type="submit" value="댓글작성">
-    </form>
-    <ul>
-        {% for comment in comments %}
-            <li>
-                {{comment.user}}. {{ comment.content }}
-                {% if user == comment.user %}
-                <form action="{% url 'articles:comment_delete' comment.pk %}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" value="삭제">
-                </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock content %}
-

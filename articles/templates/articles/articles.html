@@ -55,12 +55,12 @@
                                     
                                     <!-- data-bs-target을 부름 exampleModal{{article.pk}}을 튀어나오게함 -->
                                     {% endif %}
-                                    <form action="{% url 'articles:like' article.pk %}" method="POST" >
+                                    <form action="{% url 'articles:like' article.pk %}" method="POST" class="btn btn-outline-secondary" style="padding: 0%;">
                                         {% csrf_token %}
                                         {% if user in article.like_users.all %}
-                                        <button type="submit" onclick="event.stopPropagation();">좋아요 취소</button>
+                                        <button type="submit" onclick="event.stopPropagation();" class="btn btn-sum text-danger"><i class="fa-solid fa-heart"></i></button>
                                         {% else %}
-                                        <button type="submit" onclick="event.stopPropagation();">좋아요</button>
+                                        <button type="submit" onclick="event.stopPropagation();" class="btn btn-sum text-danger" ><i class="fa-regular fa-heart"></i></button>
                                         {% endif %}
                                     </form>
                                 </div>
