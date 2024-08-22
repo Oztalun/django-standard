@@ -14,7 +14,7 @@
     <div>
         <form action="{% url 'users:follow' member.id %}" method="POST">
             {% csrf_token %}
-            {% if user in member.followers.all %}
+            {% if request.user in member.followers.all %}
                 <button type="submit">언팔로우</button>
             {% else %}
                 <button type="submit">팔로우</button>

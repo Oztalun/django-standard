@@ -4,5 +4,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     following = models.ManyToManyField(
-        "self", symmetrical=False, related_name="followers"#, symmetrical=False
+        "self", symmetrical=False, related_name="followers"
     )
+
