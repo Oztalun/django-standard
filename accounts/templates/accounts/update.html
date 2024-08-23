@@ -7,7 +7,7 @@
 {% block content %}
     <h1>회원정보수정</h1>
     
-    <form action="{% url 'accounts:update' %}" method="POST">
+    <form action="{% url 'accounts:update' %}" method="POST" enctype="multipart/form-data">
         {{ form.as_p }}
         {% csrf_token %}
         <button type="submit">수정하기</button>
