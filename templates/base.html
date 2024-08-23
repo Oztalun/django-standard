@@ -290,7 +290,7 @@
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if request.user.is_authenticated %}
                                 {% if request.user.image %}
-                                <img src="{{ account.image.url }}" alt="mdo" height="32" class="rounded-circle"
+                                <img src="{{ request.user.image.url }}" alt="mdo" height="32" class="rounded-circle"
                                     style="width: 32px;">
                                 {% else %}
                                 <img src="https://teamsparta.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F83c75a39-3aba-4ba4-a792-7aefe4b07895%2F91b523d3-e116-4d12-a8c9-401ea4b12c4a%2Fuser.png?table=block&id=7d771e5a-5901-42b4-9532-f42f6bf86e5d&spaceId=83c75a39-3aba-4ba4-a792-7aefe4b07895&width=260&userId=&cache=v2" alt="mdo" height="32" class="rounded-circle"
