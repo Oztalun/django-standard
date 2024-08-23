@@ -4,7 +4,8 @@ from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods, require_POST
-
+from django.conf import settings
+from django.utils import timezone
 
 
 
@@ -13,8 +14,9 @@ def index(request):
 
 
 
+
 def articles(request):
-    context = {"articles": Article.objects.all().order_by("-created_at")}
+    context = {"articles": Article.objects.all().order_by("-created_at"), "timediff": timezone.now()}
     return render(request, "articles/articles.html", context)
 # '{{article.title}}'
 
@@ -60,15 +62,13 @@ def create(request):
     context = {"forms": forms}
     return render(request, "articles/new.html", context)
 
+
+
 def article_detail(request, pk): 
     article = get_object_or_404(Article, pk=pk)
+    print(article.time_dif())
     comment_form = CommentForm()
     comments = article.comments.all()
-    # comments = article.commet_set.all()
-    # article_set.all
-    # comments = Comment.objects.filter(article = pk)
-    # for comment in comments:
-    #     print(comment.pk)
     context = {"article": article, "comment_form":comment_form, "comments":comments}
     return render(request, "articles/article_detail.html", context)
 

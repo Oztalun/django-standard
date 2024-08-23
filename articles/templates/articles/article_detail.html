@@ -27,7 +27,7 @@
 
 <div>
     <a href="{% url 'articles:articles' %}"><button>목록 보기</button></a>
-    <form action="{% url 'articles:like' article.pk %}" method="POST">
+    <form action="{% url 'articles:like' article.pk%}" method="POST">
         {% csrf_token %}
         {% if user in article.like_users.all %}
         <button type="submit" class="btn">

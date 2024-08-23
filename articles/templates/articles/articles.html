@@ -16,16 +16,17 @@
 
 {% block content %}
 <div>
-    <h2>Articles</h2>
+    <h2 style="display: inline;">Articles</h2>
     {% if request.user.is_authenticated %}
-    <a href="{% url 'articles:create' %}"><button>글 쓰러 가기</button></a><br><br>
+    <a href="{% url 'articles:create' %}"><button class="btn btn-sm">글 쓰러 가기</button></a><br><br>
     {% else %}
-    <a href="{% url 'articles:create' %}"><button>로그인 하고 글 쓰러 가기</button></a><br><br>
+    <a href="{% url 'articles:create' %}"><button class="btn btn-sm">로그인 하고 글 쓰러 가기</button></a><br><br>
     {% endif %}
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="row row-cols-3 row-cols-lg-5 g-2 g-1g-3">
+                <!-- <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> -->
                 {% for article in articles %}
                 <div class="col"
                     onclick="event.stopPropagation(); window.location.href='{% url 'articles:article_detail' article.pk %}'">
@@ -43,7 +44,8 @@
                         </svg>
                         {% endif %}
                         <div class="card-body">
-                            <p class="card-text">{{ article.title }}</p>
+                            <p class="card-text unbr" style="display: inline-block;">{{ article.title }}</p>
+                            <p class="card-text unbr" style="display: inline-block;">test</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     {% if request.user.id == article.author.id %}
@@ -52,24 +54,27 @@
                                     <button type="button" class="btn btn-sm btn-outline-secondary"
                                         onclick="event.stopPropagation();" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal{{article.pk}}">Delete</button>
-                                    
+
                                     <!-- data-bs-target을 부름 exampleModal{{article.pk}}을 튀어나오게함 -->
                                     {% endif %}
-                                    <form action="{% url 'articles:like' article.pk %}" method="POST" class="btn btn-outline-secondary" style="padding: 0%;">
+                                    <form action="{% url 'articles:like' article.pk %}" method="POST"
+                                        class="btn btn-outline-secondary" style="padding: 0%;">
                                         {% csrf_token %}
                                         {% if user in article.like_users.all %}
-                                        <button type="submit" onclick="event.stopPropagation();" class="btn btn-sum text-danger"><i class="fa-solid fa-heart"></i></button>
+                                        <button type="submit" onclick="event.stopPropagation();"
+                                            class="btn btn-sum text-danger"><i class="fa-solid fa-heart"></i></button>
                                         {% else %}
-                                        <button type="submit" onclick="event.stopPropagation();" class="btn btn-sum text-danger" ><i class="fa-regular fa-heart"></i></button>
+                                        <button type="submit" onclick="event.stopPropagation();"
+                                            class="btn btn-sum text-danger"><i class="fa-regular fa-heart"></i></button>
                                         {% endif %}
                                     </form>
                                 </div>
-                                <small class="text-body-secondary">9 mins</small>
+                                <small class="text-body-secondary">{{ article.time_dif }}</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- id의 exampleModal을 부름 -->
+                <!-- 모달창     id의 exampleModal을 부름     -->
                 <div class="modal fade" id="exampleModal{{article.pk}}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
